@@ -1,2 +1,2 @@
-# menubar-line
+# line-menu
 

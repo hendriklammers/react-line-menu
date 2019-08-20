@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, {
+  useState,
+  useCallback,
+  Children,
+  ReactNode,
+  cloneElement,
+  isValidElement,
+} from 'react'
 import styled from 'styled-components'
 import Line, { LineTransform } from './Line'
-
-const menuItems = [
-  { label: 'Home' },
-  { label: 'About' },
-  { label: 'Blog' },
-  { label: 'Contact' },
-]
 
 const Menubar = styled.div`
   position: relative;
@@ -16,48 +16,46 @@ const Menubar = styled.div`
   justify-content: center;
 `
 
-const Link = styled.a`
-  margin: 0 10px;
-  font-size: 30px;
-  color: #000;
-  text-decoration: none;
-`
+interface Props {
+  children: ReactNode
+  active: number
+  clickHandler: (index: number) => void
+}
 
-const LineMenu: React.FC = () => {
-  const [active, setActive] = useState<null | number>()
-  const linkRefs = useRef<(HTMLAnchorElement)[]>([])
+const LineMenu = ({ children, active, clickHandler }: Props) => {
+  const [transforms, setTransforms] = useState<LineTransform[]>([])
 
-  useEffect(() => {
-    setActive(2)
+  const ref = useCallback(node => {
+    if (node !== null) {
+      setTransforms(t => [
+        ...t,
+        {
+          left: node.offsetLeft,
+          width: node.getBoundingClientRect().width,
+        },
+      ])
+    }
   }, [])
 
-  const transform = (index: number): LineTransform => {
-    const ref = linkRefs.current[index]
-    return {
-      translateX: ref ? ref.offsetLeft : 0,
-      scaleX: ref ? ref.getBoundingClientRect().width / 100 : 0,
-    }
+  const onClickHandler = (index: number) => (event: MouseEvent) => {
+    event.preventDefault()
+    clickHandler(index)
   }
 
   return (
-    <>
-      <Menubar>
-        {menuItems.map(({ label }, index) => (
-          <Link
-            key={index}
-            href="/"
-            ref={ref => linkRefs.current.push(ref as HTMLAnchorElement)}
-            onClick={event => {
-              event.preventDefault()
-              setActive(index)
-            }}
-          >
-            {label}
-          </Link>
-        ))}
-        {typeof active === 'number' && <Line {...transform(active)} />}
-      </Menubar>
-    </>
+    <Menubar>
+      {Children.map(children, (child, index) => {
+        if (isValidElement(child)) {
+          return cloneElement(child, {
+            onClick: onClickHandler(index),
+            ref,
+          })
+        } else {
+          return ''
+        }
+      })}
+      <Line {...transforms[active]} />
+    </Menubar>
   )
 }
 

@@ -18,6 +18,7 @@ const Menubar = styled.div`
 interface LineProps {
   translateX: number
   scaleX: number
+  duration?: number
 }
 
 const Line = styled.div`
@@ -27,6 +28,8 @@ const Line = styled.div`
   background: #000;
   width: 100px;
   height: 2px;
+  transition: transform ${({ duration = 0.3 }: LineProps) => duration}s
+    cubic-bezier(0.215, 0.61, 0.355, 1);
   transform-origin: top left;
   transform: translate3d(${(props: LineProps) => props.translateX}px, 0, 0)
     scaleX(${(props: LineProps) => props.scaleX});
@@ -40,7 +43,7 @@ const Link = styled.a`
 `
 
 const App: React.FC = () => {
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState<null | number>(null)
   const linkRefs = useRef<(HTMLAnchorElement)[]>([])
 
   useEffect(() => {
@@ -73,7 +76,7 @@ const App: React.FC = () => {
             {label}
           </Link>
         ))}
-        <Line {...activeProps(active)} />
+        {typeof active === 'number' && <Line {...activeProps(active)} />}
       </Menubar>
     </>
   )

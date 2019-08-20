@@ -9,7 +9,7 @@ import React, {
 import styled from 'styled-components'
 import Line, { LineTransform } from './Line'
 
-const Menubar = styled.div`
+const Container = styled.div`
   position: relative;
   display: inline-flex;
   flex-direction: row;
@@ -19,7 +19,7 @@ const Menubar = styled.div`
 interface Props {
   children: ReactNode
   active: number
-  clickHandler: (index: number) => void
+  clickHandler: (index: number, event?: MouseEvent) => void
 }
 
 const LineMenu = ({ children, active, clickHandler }: Props) => {
@@ -37,17 +37,12 @@ const LineMenu = ({ children, active, clickHandler }: Props) => {
     }
   }, [])
 
-  const onClickHandler = (index: number) => (event: MouseEvent) => {
-    event.preventDefault()
-    clickHandler(index)
-  }
-
   return (
-    <Menubar>
+    <Container>
       {Children.map(children, (child, index) => {
         if (isValidElement(child)) {
           return cloneElement(child, {
-            onClick: onClickHandler(index),
+            onClick: (event: MouseEvent) => clickHandler(index, event),
             ref,
           })
         } else {
@@ -55,7 +50,7 @@ const LineMenu = ({ children, active, clickHandler }: Props) => {
         }
       })}
       <Line {...transforms[active]} />
-    </Menubar>
+    </Container>
   )
 }
 

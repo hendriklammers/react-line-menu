@@ -12,9 +12,16 @@ const Link = styled.a`
 const App = () => {
   const [activeMenuItem, setActiveMenuItem] = useState(0)
 
+  const clickHandler = (index: number, event?: MouseEvent) => {
+    if (event) {
+      event.preventDefault()
+    }
+    setActiveMenuItem(index)
+  }
+
   return (
     <div>
-      <LineMenu active={activeMenuItem} clickHandler={setActiveMenuItem}>
+      <LineMenu active={activeMenuItem} clickHandler={clickHandler}>
         <Link href="/">Home</Link>
         <Link href="/about">About</Link>
         <Link href="/blog">Blog</Link>

@@ -1,7 +1,4 @@
-import React, { useRef } from 'react'
-// react-spring causes tsserver performance problems
-// https://github.com/react-spring/react-spring/issues/613
-import { useSpring, animated } from 'react-spring'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const menuItems = [
@@ -11,21 +8,28 @@ const menuItems = [
   { label: 'Contact', active: false },
 ]
 
-const Menubar = styled.nav`
+const Menubar = styled.div`
   position: relative;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   justify-content: center;
-  margin: 20px 10px;
 `
 
-const Line = styled(animated.div)`
+interface LineProps {
+  translateX: number
+  scaleX: number
+}
+
+const Line = styled.div`
   position: absolute;
   left: 0;
-  top: 0;
+  top: calc(100% + 2px);
   background: #000;
   width: 100px;
   height: 2px;
+  transform-origin: top left;
+  transform: translate3d(${(props: LineProps) => props.translateX}px, 0, 0)
+    scaleX(${(props: LineProps) => props.scaleX});
 `
 
 const Link = styled.a`
@@ -35,39 +39,43 @@ const Link = styled.a`
   text-decoration: none;
 `
 
-const App = () => {
-  const [animatedProps, setAnimatedProps] = useSpring(() => ({
-    transformOrigin: 'top left',
-    transform: 'translateX(0px) scaleX(1)',
-    config: { mass: 1, tension: 120, friction: 20 },
-  }))
-
+const App: React.FC = () => {
+  const [active, setActive] = useState(0)
   const linkRefs = useRef<(HTMLAnchorElement)[]>([])
 
+  useEffect(() => {
+    setActive(2)
+  }, [])
+
+  const activeProps = (index: number): LineProps => {
+    const ref = linkRefs.current[index]
+    const translateX = ref ? ref.offsetLeft : 0
+    const scaleX = ref ? ref.getBoundingClientRect().width / 100 : 0
+    return {
+      translateX,
+      scaleX,
+    }
+  }
+
   return (
-    <Menubar>
-      {menuItems.map(({ label }, index) => {
-        return (
+    <>
+      <Menubar>
+        {menuItems.map(({ label }, index) => (
           <Link
             key={index}
             href="/"
             ref={ref => linkRefs.current.push(ref as HTMLAnchorElement)}
             onClick={event => {
               event.preventDefault()
-              const ref = linkRefs.current[index]
-              const left = ref.offsetLeft
-              const scale = ref.getBoundingClientRect().width / 100
-              setAnimatedProps({
-                transform: `translateX(${left}px) scaleX(${scale})`,
-              })
+              setActive(index)
             }}
           >
             {label}
           </Link>
-        )
-      })}
-      <Line style={animatedProps} />
-    </Menubar>
+        ))}
+        <Line {...activeProps(active)} />
+      </Menubar>
+    </>
   )
 }
 

@@ -1,28 +1,33 @@
-import React, {
-  useState,
-  useCallback,
-  Children,
-  ReactNode,
-  cloneElement,
-  isValidElement,
-} from 'react'
+import React, { useState, useCallback, Children, ReactNode } from 'react'
 import styled from 'styled-components'
 import Line, { LineTransform } from './Line'
 
-const Container = styled.div`
-  position: relative;
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: center;
-`
-
-interface Props {
-  children: ReactNode
-  active: number
-  clickHandler: (index: number, event?: MouseEvent) => void
+interface ListProps {
+  space: number
 }
 
-const LineMenu = ({ children, active, clickHandler }: Props) => {
+const List = styled.ul`
+  margin: 0 -${({ space }: ListProps) => space / 2}px;
+  padding: 0;
+  position: relative;
+  display: ${({ space }: ListProps) => (space > 0 ? 'inline-flex' : 'flex')};
+  flex-direction: row;
+  justify-content: ${({ space }: ListProps) =>
+    space > 0 ? 'center' : 'space-between'};
+  list-style: none;
+
+  & > li {
+    margin: 0 ${({ space }: ListProps) => space / 2}px;
+  }
+`
+
+interface Props extends Partial<ListProps> {
+  children: ReactNode
+  active: number
+  clickHandler: (index: number) => void
+}
+
+const LineMenu = ({ children, active, space = 0, clickHandler }: Props) => {
   const [transforms, setTransforms] = useState<LineTransform[]>([])
 
   const ref = useCallback(node => {
@@ -38,19 +43,14 @@ const LineMenu = ({ children, active, clickHandler }: Props) => {
   }, [])
 
   return (
-    <Container>
-      {Children.map(children, (child, index) => {
-        if (isValidElement(child)) {
-          return cloneElement(child, {
-            onClick: (event: MouseEvent) => clickHandler(index, event),
-            ref,
-          })
-        } else {
-          return ''
-        }
-      })}
+    <List space={space}>
+      {Children.map(children, (child, index) => (
+        <li ref={ref} key={index} onClick={() => clickHandler(index)}>
+          {child}
+        </li>
+      ))}
       <Line {...transforms[active]} />
-    </Container>
+    </List>
   )
 }
 

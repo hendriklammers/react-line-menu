@@ -56,9 +56,14 @@ export interface LineTransform {
   width: number
 }
 
+export type LinePosition = number | 'top' | 'bottom' | 'center'
+
 interface Props extends LineTransform {
   duration: number
   easing: Easing
+  weight: number
+  color: string
+  position: LinePosition
 }
 
 const transform = ({ left = 0, width = 10 }: LineTransform) =>
@@ -67,13 +72,26 @@ const transform = ({ left = 0, width = 10 }: LineTransform) =>
 const transition = ({ duration, easing }: Props) =>
   `transform ${duration}s ${beziers[easing] ? beziers[easing] : easing}`
 
+const top = ({ position, weight }: Props): string => {
+  switch (position) {
+    case 'top':
+      return `${0 - weight}px`
+    case 'bottom':
+      return '100%'
+    case 'center':
+      return '50%'
+    default:
+      return `${position}px`
+  }
+}
+
 const Line = styled.div<Props>`
   position: absolute;
   left: 0;
-  top: calc(100% + 2px);
-  background: #000;
+  top: ${top};
+  background: ${({ color }) => color};
   width: 10px;
-  height: 2px;
+  height: ${({ weight }) => weight}px;
   transform-origin: top left;
   transform: ${transform};
   transition: ${transition};

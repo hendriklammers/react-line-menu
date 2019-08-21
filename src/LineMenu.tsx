@@ -1,23 +1,23 @@
 import React, { useState, useCallback, Children, ReactNode } from 'react'
 import styled from 'styled-components'
-import Line, { LineTransform, Easing } from './Line'
+import Line, { LineTransform, Easing, LinePosition } from './Line'
 
 interface ListProps {
-  space: number
+  itemSpacing: number
 }
 
-const List = styled.ul`
-  margin: 0 -${({ space }: ListProps) => space / 2}px;
+const List = styled.ul<ListProps>`
+  margin: 0 -${({ itemSpacing }) => itemSpacing / 2}px;
   padding: 0;
   position: relative;
-  display: ${({ space }: ListProps) => (space > 0 ? 'inline-flex' : 'flex')};
+  display: ${({ itemSpacing }) => (itemSpacing > 0 ? 'inline-flex' : 'flex')};
   flex-direction: row;
-  justify-content: ${({ space }: ListProps) =>
-    space > 0 ? 'center' : 'space-between'};
+  justify-content: ${({ itemSpacing }) =>
+    itemSpacing > 0 ? 'center' : 'space-between'};
   list-style: none;
 
   & > li {
-    margin: 0 ${({ space }: ListProps) => space / 2}px;
+    margin: 0 ${({ itemSpacing }) => itemSpacing / 2}px;
   }
 `
 
@@ -27,15 +27,21 @@ interface Props extends Partial<ListProps> {
   clickHandler: (index: number) => void
   duration?: number
   easing?: Easing
+  lineWeight?: number
+  lineColor?: string
+  linePosition?: LinePosition
 }
 
 const LineMenu = ({
   children,
   active,
-  space = 0,
+  itemSpacing = 0,
   clickHandler,
   duration = 0.3,
   easing = 'linear',
+  lineWeight = 2,
+  lineColor = '#000',
+  linePosition = 'bottom',
 }: Props) => {
   const [transforms, setTransforms] = useState<LineTransform[]>([])
 
@@ -52,14 +58,21 @@ const LineMenu = ({
   }, [])
 
   return (
-    <List space={space}>
+    <List itemSpacing={itemSpacing}>
       {Children.map(children, (child, index) => (
         <li ref={ref} key={index} onClick={() => clickHandler(index)}>
           {child}
         </li>
       ))}
       {active !== undefined && (
-        <Line {...transforms[active]} easing={easing} duration={duration} />
+        <Line
+          {...transforms[active]}
+          easing={easing}
+          duration={duration}
+          weight={lineWeight}
+          color={lineColor}
+          position={linePosition}
+        />
       )}
     </List>
   )

@@ -43,9 +43,12 @@ const Navigation = withRouter(({ location }: RouteProps) => {
     <LineMenu
       active={activeMenuItem !== null ? activeMenuItem : undefined}
       clickHandler={clickHandler}
-      space={20}
+      itemSpacing={20}
       easing="easeOutSine"
       duration={0.4}
+      lineWeight={3}
+      lineColor="#ff1aa3"
+      linePosition="bottom"
     >
       {menuItems.map(({ to, label }, index) => (
         <MenuLink to={to} key={index}>

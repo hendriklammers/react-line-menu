@@ -2,7 +2,7 @@ import React, { useState, useCallback, Children, ReactNode } from 'react'
 import styled from 'styled-components'
 import Line, { LineTransform } from './Line'
 
-type ListProps = {
+interface ListProps {
   space: number
 }
 
@@ -21,11 +21,11 @@ const List = styled.ul`
   }
 `
 
-type Props = {
+interface Props extends Partial<ListProps> {
   children: ReactNode
   active: number
   clickHandler: (index: number) => void
-} & Partial<ListProps>
+}
 
 const LineMenu = ({ children, active, space = 0, clickHandler }: Props) => {
   const [transforms, setTransforms] = useState<LineTransform[]>([])

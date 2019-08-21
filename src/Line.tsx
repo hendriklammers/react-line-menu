@@ -6,9 +6,9 @@ export interface LineTransform {
   width: number
 }
 
-type Props = {
+interface Props extends LineTransform {
   duration?: number
-} & LineTransform
+}
 
 // const easings = {
 // 'easeInLinear': bezier(0,0,1,1),

@@ -49,7 +49,9 @@ const LineMenu = ({ children, active, space = 0, clickHandler }: Props) => {
           {child}
         </li>
       ))}
-      {active !== undefined && <Line {...transforms[active]} />}
+      {active !== undefined && (
+        <Line {...transforms[active]} easing="easeOutQuad" />
+      )}
     </List>
   )
 }

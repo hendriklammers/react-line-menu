@@ -23,7 +23,7 @@ const List = styled.ul`
 
 interface Props extends Partial<ListProps> {
   children: ReactNode
-  active: number
+  active?: number
   clickHandler: (index: number) => void
 }
 
@@ -49,7 +49,7 @@ const LineMenu = ({ children, active, space = 0, clickHandler }: Props) => {
           {child}
         </li>
       ))}
-      <Line {...transforms[active]} />
+      {active !== undefined && <Line {...transforms[active]} />}
     </List>
   )
 }

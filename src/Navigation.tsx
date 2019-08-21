@@ -9,7 +9,7 @@ const MenuLink = styled(Link)`
   text-decoration: none;
 `
 
-type MenuItem = {
+interface MenuItem {
   to: string
   label: string
 }
@@ -22,11 +22,7 @@ const menuItems: MenuItem[] = [
 ]
 
 const Navigation = withRouter(({ location }: RouteProps) => {
-  const [activeMenuItem, setActiveMenuItem] = useState(0)
-
-  const clickHandler = (index: number) => {
-    setActiveMenuItem(index)
-  }
+  const [activeMenuItem, setActiveMenuItem] = useState<number | null>(null)
 
   useEffect(() => {
     if (location) {
@@ -39,8 +35,16 @@ const Navigation = withRouter(({ location }: RouteProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const clickHandler = (index: number) => {
+    setActiveMenuItem(index)
+  }
+
   return (
-    <LineMenu active={activeMenuItem} clickHandler={clickHandler} space={20}>
+    <LineMenu
+      active={activeMenuItem !== null ? activeMenuItem : undefined}
+      clickHandler={clickHandler}
+      space={20}
+    >
       {menuItems.map(({ to, label }, index) => (
         <MenuLink to={to} key={index}>
           {label}

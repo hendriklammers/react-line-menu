@@ -25,7 +25,7 @@ type PennerEasing =
   | 'easeOutQuint'
   | 'easeInOutQuint'
 
-type Easing = CssEasing | PennerEasing
+export type Easing = CssEasing | PennerEasing
 
 const beziers: Record<string, string> = {
   easeInExpo: 'cubic-bezier(0.71,0.01,0.83,0)',
@@ -56,18 +56,18 @@ export interface LineTransform {
   width: number
 }
 
-interface LineProps extends LineTransform {
-  duration?: number
-  easing?: Easing
+interface Props extends LineTransform {
+  duration: number
+  easing: Easing
 }
 
 const transform = ({ left = 0, width = 10 }: LineTransform) =>
   `translate3d(${left}px, 0, 0) scaleX(${width / 10})`
 
-const transition = ({ duration = 0.3, easing = 'linear' }) =>
+const transition = ({ duration, easing }: Props) =>
   `transform ${duration}s ${beziers[easing] ? beziers[easing] : easing}`
 
-const Line = styled.div<LineProps>`
+const Line = styled.div<Props>`
   position: absolute;
   left: 0;
   top: calc(100% + 2px);

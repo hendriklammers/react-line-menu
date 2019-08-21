@@ -1,6 +1,6 @@
 import React, { useState, useCallback, Children, ReactNode } from 'react'
 import styled from 'styled-components'
-import Line, { LineTransform } from './Line'
+import Line, { LineTransform, Easing } from './Line'
 
 interface ListProps {
   space: number
@@ -22,12 +22,21 @@ const List = styled.ul`
 `
 
 interface Props extends Partial<ListProps> {
-  children: ReactNode
   active?: number
+  children: ReactNode
   clickHandler: (index: number) => void
+  duration?: number
+  easing?: Easing
 }
 
-const LineMenu = ({ children, active, space = 0, clickHandler }: Props) => {
+const LineMenu = ({
+  children,
+  active,
+  space = 0,
+  clickHandler,
+  duration = 0.3,
+  easing = 'linear',
+}: Props) => {
   const [transforms, setTransforms] = useState<LineTransform[]>([])
 
   const ref = useCallback(node => {
@@ -50,7 +59,7 @@ const LineMenu = ({ children, active, space = 0, clickHandler }: Props) => {
         </li>
       ))}
       {active !== undefined && (
-        <Line {...transforms[active]} easing="easeOutQuad" />
+        <Line {...transforms[active]} easing={easing} duration={duration} />
       )}
     </List>
   )

@@ -44,6 +44,8 @@ const Navigation = withRouter(({ location }: RouteProps) => {
       active={activeMenuItem !== null ? activeMenuItem : undefined}
       clickHandler={clickHandler}
       space={20}
+      easing="easeOutSine"
+      duration={0.4}
     >
       {menuItems.map(({ to, label }, index) => (
         <MenuLink to={to} key={index}>

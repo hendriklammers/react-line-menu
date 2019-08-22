@@ -68,7 +68,7 @@ const LineMenu = ({
           {child}
         </li>
       ))}
-      {active !== undefined && (
+      {active !== undefined && active < Children.count(children) && (
         <Line
           {...transforms[active]}
           easing={easing}

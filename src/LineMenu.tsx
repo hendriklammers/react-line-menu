@@ -76,6 +76,7 @@ const LineMenu = ({
           weight={lineWeight}
           color={lineColor}
           position={linePosition}
+          data-testid="line"
         />
       )}
     </List>

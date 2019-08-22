@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LineMenu component renders correctly 1`] = `
+<DocumentFragment>
+  <ul
+    class="sc-bwzfXH dubLVX"
+  >
+    <li>
+      <a
+        href="/"
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        href="/contact"
+      >
+        Contact
+      </a>
+    </li>
+  </ul>
+</DocumentFragment>
+`;
+
+exports[`LineMenu component renders correctly with props 1`] = `
+<DocumentFragment>
+  <ul
+    class="sc-bwzfXH dubLVX"
+  >
+    <li>
+      <a
+        href="/"
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a
+        href="/about"
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        href="/contact"
+      >
+        Contact
+      </a>
+    </li>
+    <div
+      class="sc-bdVaJa enSZrw"
+      color="#ff00ff"
+      data-testid="line"
+      width="0"
+    />
+  </ul>
+</DocumentFragment>
+`;

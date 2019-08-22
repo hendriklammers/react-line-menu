@@ -24,7 +24,7 @@ const List = styled.ul<ListProps>`
 interface Props extends Partial<ListProps> {
   active?: number
   children: ReactNode
-  clickHandler: (index: number) => void
+  clickHandler?: (index: number) => void
   duration?: number
   easing?: Easing
   lineWeight?: number
@@ -60,7 +60,11 @@ const LineMenu = ({
   return (
     <List itemSpacing={itemSpacing}>
       {Children.map(children, (child, index) => (
-        <li ref={ref} key={index} onClick={() => clickHandler(index)}>
+        <li
+          ref={ref}
+          key={index}
+          onClick={() => clickHandler && clickHandler(index)}
+        >
           {child}
         </li>
       ))}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
-import LineMenu from './LineMenu'
+import LineMenu from '../LineMenu'
 
 describe('LineMenu component', () => {
   it('renders correctly', () => {
